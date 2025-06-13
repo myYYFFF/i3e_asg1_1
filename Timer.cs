@@ -25,8 +25,9 @@ public class Timer : MonoBehaviour
         elapsedTime += Time.deltaTime;
 
         int minutes = Mathf.FloorToInt(elapsedTime / 60);
+        //takes the resulting floating-point number of minutes and rounds it down to the nearest whole integer
         int seconds = Mathf.FloorToInt(elapsedTime % 60);
 
-        timertext.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timertext.text = string.Format("{0:00}:{1:00}", minutes, seconds);//min:sec
     }
 }

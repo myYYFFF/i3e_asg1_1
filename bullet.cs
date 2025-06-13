@@ -1,64 +1,45 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: This script controls how the coin behaves when collected and when it gets highlighted.
+ * Author: [Mei Yifan]
+ * Date: [13/6/2025]
+ * Description: This script lets the projectile hurt enemies when it hits them.
  */
 
 using UnityEngine;
 
 /// <summary>
-/// Handles coin behavior like being collected and highlighted.
+/// Makes the projectile do damage when it hits something.
 /// </summary>
-public class CoinBehaviour : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
     /// <summary>
-    /// The renderer of the coin.
+    /// How much damage this projectile does.
     /// </summary>
-    MeshRenderer MyMeshRenderer;
+    public int damage = 1;
 
     /// <summary>
-    /// Material used when the coin is highlighted.
+    /// Change the damage this projectile can do.
     /// </summary>
-    [SerializeField] Material hightlightMat;
-
-    /// <summary>
-    /// The original material before highlight.
-    /// </summary>
-    Material originalMat;
-
-    /// <summary>
-    /// How much the coin is worth in score.
-    /// </summary>
-    int value = 10;
-
-    /// <summary>
-    /// Gives the score to the player and removes the coin.
-    /// </summary>
-    /// <param name="player">The player who collects the coin.</param>
-    public void Collect(PlayerBehaviour player)
+    /// <param name="dmg">The new damage amount.</param>
+    public void SetDamage(int dmg)
     {
-        player.ModifyScore(value);
-        Destroy(gameObject); // destroy when collected
+        damage = dmg;
     }
 
     /// <summary>
-    /// Called when the coin appears. Sets up the material.
+    /// Happens when the projectile hits something.
     /// </summary>
-    void Start() 
+    /// <param name="collision">Info about what was hit.</param>
+    private void OnCollisionEnter(Collision collision)
     {
-        MyMeshRenderer = GetComponent<MeshRenderer>(); // get renderer
-        originalMat = MyMeshRenderer.material; // store original material
-    }
+        // Try to get the MobHealth from what we hit
+        MobHealth mob = collision.collider.GetComponent<MobHealth>();
+        if (mob != null)
+        {
+            // Deal damage to it
+            mob.TakeDamage(damage);
+        }
 
-    /// <summary>
-    /// Makes the coin look highlighted.
-    /// </summary>
-    public void Highlight()
-    {
-        MyMeshRenderer.material = hightlightMat; 
+        // Destroy the projectile after it hits
+        Destroy(gameObject);
     }
-
-    /// <summary>
-    /// Returns the coin to its original look.
-    /// </summary>
-    public void UnHighlight()
+}
