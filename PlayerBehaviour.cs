@@ -1,3 +1,9 @@
+/*
+ * Author: Mei Yifan
+ * Date: 13/6/2025
+ * Description: Handles player health, interactions, shooting, scoring, and game state in the scene.
+ */
+
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -8,23 +14,36 @@ using UnityEditor;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    /// <summary> Player's maximum health value. </summary>
     public int maxHealth = 100;
-    public int currentHealth = 100;
-    public int healAmount = 5;
-    public int damageAmount = 5;
-    public GameObject playerFlashLight;
-    public GameObject gunPlayer;
 
+    /// <summary> Player's current health value. </summary>
+    public int currentHealth = 100;
+
+    /// <summary> Amount of health to restore per healing tick. </summary>
+    public int healAmount = 5;
+
+    /// <summary> Amount of damage to apply per damage tick. </summary>
+    public int damageAmount = 5;
+
+    /// <summary> Reference to the player's flashlight GameObject. </summary>
+    public GameObject playerFlashLight;
+
+    /// <summary> Reference to the player's gun GameObject. </summary>
+    public GameObject gunPlayer;
 
     bool isInHealingArea = false;
     bool isInDamageArea = false;
     bool isDead = false;
     bool hasGun = false;
 
-
     float healTimer = 0f;
     float damageTimer = 0f;
+
+    /// <summary> Time interval in seconds between damage/healing ticks. </summary>
     float interval = 1f;
+
+    /// <summary> Maximum distance for interaction raycasting. </summary>
     float interactionDistance = 5f;
 
     CoinBehaviour currentCoin;
@@ -33,21 +52,39 @@ public class PlayerBehaviour : MonoBehaviour
     TorchlightBehaviour Torch;
     gunBehaviour gun;
     healingPill currentPill;
+
     bool canInteract = false;
 
-    [SerializeField] GameObject projectile;
-    [SerializeField] Transform spwanPoint;
-    [SerializeField] float fireStrength = 0f;
-    [SerializeField] float fireRate = 0.25f;
-    [SerializeField] private GameObject popupPanel;
+    [SerializeField]
+    [Tooltip("Projectile prefab to spawn when firing.")]
+    GameObject projectile;
 
+    [SerializeField]
+    [Tooltip("Transform where projectiles spawn.")]
+    Transform spwanPoint;
+
+    [SerializeField]
+    [Tooltip("Force applied to fired projectiles.")]
+    float fireStrength = 0f;
+
+    [SerializeField]
+    [Tooltip("Minimum time between shots in seconds.")]
+    float fireRate = 0.25f;
+
+    [SerializeField]
+    [Tooltip("UI panel to display when the game ends.")]
+    private GameObject popupPanel;
 
     float fireCooldown = 0f;
     int totalScore = 0;
 
+    /// <summary>
+    /// Called every frame. Handles shooting input, raycasting for collectibles,
+    /// and applying healing or damage over time in designated areas.
+    /// </summary>
     void Update()
     {
-        // Raycast for Collectibles
+        // Raycast for collectibles in front of the player
         RaycastHit hitInfo;
         Debug.DrawRay(spwanPoint.position, spwanPoint.forward * interactionDistance, Color.green);
 
@@ -57,10 +94,10 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 if (currentCoin != null)
                     currentCoin.UnHighlight();
-                
+
                 currentCoin = hitInfo.collider.GetComponent<CoinBehaviour>();
-                
-                if(currentCoin != null)
+
+                if (currentCoin != null)
                     currentCoin.Highlight();
             }
             else
@@ -83,6 +120,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (isDead) return;
 
+        // Handle firing cooldown and shooting input
         fireCooldown -= Time.deltaTime;
         if (Input.GetButton("Fire1") && fireCooldown <= 0f)
         {
@@ -90,8 +128,7 @@ public class PlayerBehaviour : MonoBehaviour
             fireCooldown = fireRate;
         }
 
-
-
+        // Heal over time if inside healing area and not at max health
         if (isInHealingArea && currentHealth < maxHealth)
         {
             healTimer += Time.deltaTime;
@@ -102,6 +139,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
         }
 
+        // Damage over time if inside damage area and still alive
         if (isInDamageArea && currentHealth > 0)
         {
             damageTimer += Time.deltaTime;
@@ -113,6 +151,11 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Modifies current health by the given amount, clamping between 0 and maxHealth.
+    /// Triggers death if health drops to zero or below.
+    /// </summary>
+    /// <param name="amount">Amount to add (positive) or subtract (negative) from current health.</param>
     void ModifyHealth(int amount)
     {
         currentHealth += amount;
@@ -132,40 +175,40 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
         Debug.Log("Current Health: " + currentHealth);
-        if ( currentHealth == maxHealth)
+        if (currentHealth == maxHealth)
         {
             Debug.Log("You are at full health!");
         }
     }
 
+    /// <summary>
+    /// Called when player enters a trigger collider.
+    /// Tracks entering healing areas, damage areas, collectibles, doors, torches, healing pills, guns, and end zones.
+    /// </summary>
+    /// <param name="other">The other collider involved in the trigger.</param>
     void OnTriggerEnter(Collider other)
-    {   
-        //healing room
+    {
         if (other.CompareTag("healingArea"))
         {
             isInHealingArea = true;
             healTimer = 0f;
         }
-        //lava 
-        if (other.CompareTag("damageArea"))
+        else if (other.CompareTag("damageArea"))
         {
             isInDamageArea = true;
             damageTimer = 0f;
         }
-        //coin
-        if (other.CompareTag("Collectible"))
+        else if (other.CompareTag("Collectible"))
         {
             currentCoin = other.GetComponent<CoinBehaviour>();
             canInteract = true;
         }
-        //torch
-        if (other.CompareTag("Torch"))
+        else if (other.CompareTag("Torch"))
         {
             Torch = other.GetComponent<TorchlightBehaviour>();
             canInteract = true;
         }
-        //access door scripts
-        if (other.CompareTag("Door"))
+        else if (other.CompareTag("Door"))
         {
             if (other.TryGetComponent<LockedDoorBehaviour>(out var locked))
             {
@@ -177,37 +220,39 @@ public class PlayerBehaviour : MonoBehaviour
             }
             canInteract = true;
         }
-        //healing pill
-        if (other.CompareTag("healingPill"))
+        else if (other.CompareTag("healingPill"))
         {
             currentPill = other.GetComponent<healingPill>();
             canInteract = true;
         }
-        //gun
-        if (other.CompareTag("gun"))
+        else if (other.CompareTag("gun"))
         {
             gun = other.GetComponent<gunBehaviour>();
             canInteract = true;
         }
-        //endzone
-        if (other.CompareTag("EndZone"))
+        else if (other.CompareTag("EndZone"))
         {
             EndGame();
         }
     }
 
+    /// <summary>
+    /// Called when player exits a trigger collider.
+    /// Resets corresponding states and references.
+    /// </summary>
+    /// <param name="other">The other collider involved in the trigger.</param>
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("healingArea"))
             isInHealingArea = false;
-        if (other.CompareTag("damageArea"))
+        else if (other.CompareTag("damageArea"))
             isInDamageArea = false;
-        if (other.CompareTag("Collectible"))
+        else if (other.CompareTag("Collectible"))
         {
             currentCoin = null;
             canInteract = false;
         }
-        if (other.CompareTag("Door"))
+        else if (other.CompareTag("Door"))
         {
             lockedDoor = null;
             normalDoor = null;
@@ -215,25 +260,36 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-
-    //gun collection restriciotn
+    /// <summary>
+    /// Sets whether the player has collected a gun.
+    /// </summary>
+    /// <param name="collected">True if the gun is collected, false otherwise.</param>
     public void SetGunCollected(bool collected)
     {
         hasGun = collected;
     }
 
-    //allow fire if gun collected
+    /// <summary>
+    /// Fires a projectile if the player has a gun and is not dead.
+    /// </summary>
     void OnFire()
     {
-        if (isDead || !hasGun) return; 
+        if (isDead || !hasGun) return;
 
         GameObject newProjectile = Instantiate(projectile, spwanPoint.position, spwanPoint.rotation);
         Vector3 fireForce = spwanPoint.forward * fireStrength;
-        newProjectile.GetComponent<Rigidbody>().AddForce(fireForce);
+        Rigidbody rb = newProjectile.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(fireForce);
+        }
     }
 
-
-    void OnInteract()
+    /// <summary>
+    /// Handles interaction with objects the player is currently able to interact with.
+    /// Calls appropriate Collect or Interact methods on detected objects.
+    /// </summary>
+    public void OnInteract()
     {
         if (currentCoin != null)
         {
@@ -265,50 +321,28 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adds a given amount to the player's total score.
+    /// Does nothing if the player is dead.
+    /// </summary>
+    /// <param name="amount">Score amount to add.</param>
     public void ModifyScore(int amount)
     {
         if (isDead) return;
 
         totalScore += amount;
-        Debug.Log("Score added: " + amount + " | Total Score: " + totalScore);
     }
 
-    public int GetScore()
-    {
-        return totalScore;
-    }
-    
-
-
-    // healingpill
-    public void Heal(int amount)
-    {
-        currentHealth += amount;
-        if (currentHealth > maxHealth)
-            currentHealth = maxHealth;
-
-        Debug.Log("Healed by " + amount + ". Current Health: " + currentHealth);
-
-        if (currentHealth == maxHealth)
-        {
-            Debug.Log("You are at full health!");
-        }
-    }
-
-    
-    
-    
+    /// <summary>
+    /// Ends the game by displaying the popup panel and stopping play mode.
+    /// </summary>
     void EndGame()
     {
-        Debug.Log("You reached the end zone. Game Over!");
-
-        Time.timeScale = 0f;
-
-        if(popupPanel !=null)
-        {
-
+        if (popupPanel != null)
             popupPanel.SetActive(true);
-        }
-    }
 
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#endif
+    }
 }

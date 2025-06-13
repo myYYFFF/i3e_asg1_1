@@ -1,17 +1,32 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Shows a running timer on the UI in minutes and seconds.
+/// </summary>
 public class Timer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] TextMeshProUGUI timertext;
-    float elapsedTime;
-    // Update is called once per frame
+    /// <summary>
+    /// Text component to display the timer.
+    /// </summary>
+    [SerializeField] 
+    private TextMeshProUGUI timertext;
+
+    /// <summary>
+    /// Time passed since the timer started.
+    /// </summary>
+    private float elapsedTime;
+
+    /// <summary>
+    /// Called every frame to update the timer.
+    /// </summary>
     void Update()
     {
         elapsedTime += Time.deltaTime;
-        int minutes = Mathf.FloorToInt(elapsedTime/60);
-        int seconds = Mathf.FloorToInt(elapsedTime%60); 
-        timertext.text = string.Format("{0:00}:{1:00}",minutes,seconds);
+
+        int minutes = Mathf.FloorToInt(elapsedTime / 60);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+
+        timertext.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

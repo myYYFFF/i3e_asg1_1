@@ -1,30 +1,64 @@
+/*
+ * Author: Mei Yifan
+ * Date: 13/6/2025
+ * Description: This script controls how the coin behaves when collected and when it gets highlighted.
+ */
+
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+/// <summary>
+/// Handles coin behavior like being collected and highlighted.
+/// </summary>
+public class CoinBehaviour : MonoBehaviour
 {
-    public int damage = 1;
+    /// <summary>
+    /// The renderer of the coin.
+    /// </summary>
+    MeshRenderer MyMeshRenderer;
 
-    public void SetDamage(int dmg)
+    /// <summary>
+    /// Material used when the coin is highlighted.
+    /// </summary>
+    [SerializeField] Material hightlightMat;
+
+    /// <summary>
+    /// The original material before highlight.
+    /// </summary>
+    Material originalMat;
+
+    /// <summary>
+    /// How much the coin is worth in score.
+    /// </summary>
+    int value = 10;
+
+    /// <summary>
+    /// Gives the score to the player and removes the coin.
+    /// </summary>
+    /// <param name="player">The player who collects the coin.</param>
+    public void Collect(PlayerBehaviour player)
     {
-        damage = dmg;
+        player.ModifyScore(value);
+        Destroy(gameObject); // destroy when collected
     }
 
-    private void OnCollisionEnter(Collision collision)
+    /// <summary>
+    /// Called when the coin appears. Sets up the material.
+    /// </summary>
+    void Start() 
     {
- 
-        MobHealth mob = collision.collider.GetComponent<MobHealth>();
-        if (mob != null)
-        {
-            mob.TakeDamage(damage);
-        }
-
-   
-        DestructibleObject destructible = collision.collider.GetComponent<DestructibleObject>();
-        if (destructible != null)
-        {
-            destructible.TakeDamage(damage);
-        }
-
-        Destroy(gameObject); 
+        MyMeshRenderer = GetComponent<MeshRenderer>(); // get renderer
+        originalMat = MyMeshRenderer.material; // store original material
     }
-}
+
+    /// <summary>
+    /// Makes the coin look highlighted.
+    /// </summary>
+    public void Highlight()
+    {
+        MyMeshRenderer.material = hightlightMat; 
+    }
+
+    /// <summary>
+    /// Returns the coin to its original look.
+    /// </summary>
+    public void UnHighlight()

@@ -1,21 +1,57 @@
+/*
+ * Author: Mei Yifan
+ * Date: 13/6/2025
+ * Description: Handles mob health, damage effects, and death with score rewards and loot spawning.
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MobHealth : MonoBehaviour
 {
+    /// <summary>
+    /// Maximum health of the mob.
+    /// </summary>
     public int maxHealth = 30;
+
+    /// <summary>
+    /// Current health of the mob.
+    /// </summary>
     private int currentHealth;
 
+    /// <summary>
+    /// UI slider to show mob health.
+    /// </summary>
     public Slider healthSlider;
 
+    /// <summary>
+    /// Normal material for the mob.
+    /// </summary>
     public Material defaultMaterial;
+
+    /// <summary>
+    /// Material to show when mob is hit.
+    /// </summary>
     public Material highlightMaterial;
+
+    /// <summary>
+    /// How long the highlight stays after being hit.
+    /// </summary>
     public float highlightDuration = 0.2f;
 
+    /// <summary>
+    /// Renderer of the mob to change material.
+    /// </summary>
     private Renderer mobRenderer;
 
+    /// <summary>
+    /// Points player gets for killing this mob.
+    /// </summary>
     [SerializeField] int scoreReward = 20;
 
+    /// <summary>
+    /// Setup health and material at start.
+    /// </summary>
     void Start()
     {
         currentHealth = maxHealth;
@@ -33,6 +69,11 @@ public class MobHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when mob takes damage.
+    /// Updates health, shows highlight, and checks if dead.
+    /// </summary>
+    /// <param name="amount">Damage amount.</param>
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
@@ -52,6 +93,9 @@ public class MobHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Change material to highlight when hit, then reset after delay.
+    /// </summary>
     void HighlightOnHit()
     {
         if (mobRenderer != null && highlightMaterial != null)
@@ -62,6 +106,9 @@ public class MobHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reset material back to normal.
+    /// </summary>
     void ResetMaterial()
     {
         if (mobRenderer != null && defaultMaterial != null)
@@ -70,6 +117,10 @@ public class MobHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when mob health is zero.
+    /// Gives player score, spawns loot, and destroys mob.
+    /// </summary>
     void Die()
     {
         PlayerBehaviour player = FindObjectOfType<PlayerBehaviour>();
@@ -78,7 +129,6 @@ public class MobHealth : MonoBehaviour
             player.ModifyScore(scoreReward);
         }
 
-        //loot 
         LootSpawner lootSpawner = GetComponent<LootSpawner>();
         if (lootSpawner != null)
         {

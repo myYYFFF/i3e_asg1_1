@@ -1,17 +1,24 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Controls the UI for ending the game, including restart, quit, and resume actions.
+/// </summary>
 public class EndGameUI : MonoBehaviour
 {
+    /// <summary>
+    /// Restarts the current game by reloading the active scene.
+    /// </summary>
     public void RestartGame()
     {
-        // Reloads the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    /// <summary>
+    /// Quits the game or stops play mode if running inside the Unity editor.
+    /// </summary>
     public void QuitGame()
     {
-        // Quit the application
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false; // Stop play mode in the editor
 #else
@@ -19,9 +26,11 @@ public class EndGameUI : MonoBehaviour
 #endif
     }
 
+    /// <summary>
+    /// Resumes the game by unpausing and hiding the UI panel.
+    /// </summary>
     public void ResumeGame()
     {
-        // Unpause the game and hide the panel
         Time.timeScale = 1f;
         gameObject.SetActive(false);
     }
