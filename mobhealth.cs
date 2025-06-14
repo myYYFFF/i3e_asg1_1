@@ -1,12 +1,15 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: Handles mob health, damage effects, and death with score rewards and loot spawning.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Manages mob health, damage, visual hit feedback, and death logic including score and loot spawning.
+*/
 
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles health, damage, highlighting on hit, and death behavior for a mob.
+/// </summary>
 public class MobHealth : MonoBehaviour
 {
     /// <summary>
@@ -20,37 +23,37 @@ public class MobHealth : MonoBehaviour
     private int currentHealth;
 
     /// <summary>
-    /// UI slider to show mob health.
+    /// UI slider to display mob health.
     /// </summary>
     public Slider healthSlider;
 
     /// <summary>
-    /// Normal material for the mob.
+    /// Default material for the mob's renderer.
     /// </summary>
     public Material defaultMaterial;
 
     /// <summary>
-    /// Material to show when mob is hit.
+    /// Material used to highlight mob when hit.
     /// </summary>
     public Material highlightMaterial;
 
     /// <summary>
-    /// How long the highlight stays after being hit.
+    /// Duration to keep highlight material on hit.
     /// </summary>
     public float highlightDuration = 0.2f;
 
     /// <summary>
-    /// Renderer of the mob to change material.
+    /// Renderer component of the mob for material changes.
     /// </summary>
     private Renderer mobRenderer;
 
     /// <summary>
-    /// Points player gets for killing this mob.
+    /// Score awarded to the player upon mob death.
     /// </summary>
     [SerializeField] int scoreReward = 20;
 
     /// <summary>
-    /// Setup health and material at start.
+    /// Initialize health and UI, set default material.
     /// </summary>
     void Start()
     {
@@ -70,14 +73,12 @@ public class MobHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when mob takes damage.
-    /// Updates health, shows highlight, and checks if dead.
+    /// Reduces health by given damage amount, updates UI, triggers hit highlight, and checks for death.
     /// </summary>
-    /// <param name="amount">Damage amount.</param>
+    /// <param name="amount">Damage to apply.</param>
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-
         if (currentHealth < 0) currentHealth = 0;
 
         if (healthSlider != null)
@@ -94,7 +95,7 @@ public class MobHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Change material to highlight when hit, then reset after delay.
+    /// Changes material to highlight the mob when hit, then resets after duration.
     /// </summary>
     void HighlightOnHit()
     {
@@ -107,7 +108,7 @@ public class MobHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Reset material back to normal.
+    /// Resets the mob's material back to the default.
     /// </summary>
     void ResetMaterial()
     {
@@ -118,8 +119,7 @@ public class MobHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when mob health is zero.
-    /// Gives player score, spawns loot, and destroys mob.
+    /// Handles mob death: rewards player, spawns loot if available, and destroys mob object.
     /// </summary>
     void Die()
     {

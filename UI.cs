@@ -1,13 +1,19 @@
+/*
+* Author: Mei Yifan
+* Date: 14/6/2025
+* Description: handles restart, quit, and resume actions in the end game UI
+*/
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Controls the UI for ending the game, including restart, quit, and resume actions.
+/// controls what happens when player chooses to restart, quit, or resume from end game screen
 /// </summary>
 public class EndGameUI : MonoBehaviour
 {
     /// <summary>
-    /// Restarts the current game by reloading the active scene.
+    /// restart the current scene
     /// </summary>
     public void RestartGame()
     {
@@ -15,19 +21,19 @@ public class EndGameUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Quits the game or stops play mode if running inside the Unity editor.
+    /// quit the game (or stop play mode in editor)
     /// </summary>
     public void QuitGame()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // Stop play mode in the editor
+        UnityEditor.EditorApplication.isPlaying = false; // stop play mode in editor
 #else
-        Application.Quit(); // Quit in a built game
+        Application.Quit(); // quit the game when built
 #endif
     }
 
     /// <summary>
-    /// Resumes the game by unpausing and hiding the UI panel.
+    /// unpause the game and hide this UI
     /// </summary>
     public void ResumeGame()
     {

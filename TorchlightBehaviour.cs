@@ -1,15 +1,20 @@
+/*
+* Author: Mei Yifan
+* Date: 14/6/2025
+* Description: Enables the player's flashlight when torchlight is collected and removes the torch object.
+*/
+
 using UnityEngine;
 
 /// <summary>
-/// Handles picking up the torchlight and enabling the player's flashlight.
+/// Controls behavior when player picks up a torchlight.
 /// </summary>
 public class TorchlightBehaviour : MonoBehaviour
 {
     /// <summary>
-    /// Called when the player collects the torchlight.
-    /// Enables the player's flashlight if available and destroys the torch object.
+    /// Activates the player's flashlight and removes the torch object.
     /// </summary>
-    /// <param name="player">The player who collected the torchlight.</param>
+    /// <param name="player">The PlayerBehaviour script from the player.</param>
     public void Collect(PlayerBehaviour player)
     {
         if (player.playerFlashLight != null)

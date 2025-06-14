@@ -1,28 +1,31 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: This script lets the player heal when picking up a healing pill.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Heals the player when collected.
+*/
 
 using UnityEngine;
 
 /// <summary>
-/// Heals the player when collected.
+/// Heals the player when the pill is collected.
 /// </summary>
 public class healingPill : MonoBehaviour
 {
     /// <summary>
-    /// How much health the pill gives.
+    /// Amount of health to restore.
     /// </summary>
     public int healAmount = 50;
 
     /// <summary>
-    /// Called when the player picks up the healing pill.
+    /// Heals the player and removes the pill from the scene.
     /// </summary>
-    /// <param name="player">The player who collected it.</param>
+    /// <param name="player">The player collecting the pill.</param>
     public void Collect(PlayerBehaviour player)
     {
-        player.Heal(healAmount); // Heal the player
-        Destroy(gameObject);     // Remove the pill from the scene
+        // Restore player health
+        player.Heal(healAmount);
+
+        // Remove pill from the scene
+        Destroy(gameObject);
     }
 }

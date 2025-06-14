@@ -1,31 +1,34 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: Makes the enemy chase and face the player smoothly.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Makes an enemy chase the player using Rigidbody movement and rotate to face the player.
+*/
 
 using UnityEngine;
 
+/// <summary>
+/// Simple AI that chases the player with Rigidbody movement and rotates to face the player horizontally.
+/// </summary>
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class SimpleChase : MonoBehaviour
 {
     /// <summary>
-    /// The player to chase.
+    /// Reference to the player transform to chase.
     /// </summary>
     public Transform player;
 
     /// <summary>
-    /// How fast the enemy moves toward the player.
+    /// Movement speed toward the player.
     /// </summary>
     public float speed = 5f;
 
     /// <summary>
-    /// Rigidbody component for movement.
+    /// Rigidbody component for physics-based movement.
     /// </summary>
     private Rigidbody rb;
 
     /// <summary>
-    /// Called before the first frame update, sets up Rigidbody and finds the player if not assigned.
+    /// Initialization: cache Rigidbody and find player if not assigned.
     /// </summary>
     void Start()
     {
@@ -39,19 +42,19 @@ public class SimpleChase : MonoBehaviour
     }
 
     /// <summary>
-    /// Called on a fixed timer, moves and rotates enemy to chase the player.
+    /// Physics update: move toward and rotate to face the player.
     /// </summary>
     void FixedUpdate()
     {
         if (player == null) return;
 
-        // Get direction toward the player and normalize it
+        // Calculate normalized direction vector toward the player
         Vector3 moveDir = (player.position - transform.position).normalized;
 
-        // Move the enemy in the direction of the player
+        // Move Rigidbody toward the player
         rb.MovePosition(transform.position + moveDir * speed * Time.fixedDeltaTime);
 
-        // Calculate direction to look at, keeping same height (y)
+        // Calculate look direction on horizontal plane only
         Vector3 lookDir = new Vector3(player.position.x, transform.position.y, player.position.z) - transform.position;
 
         // Smoothly rotate to face the player

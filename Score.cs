@@ -1,24 +1,29 @@
+/*
+ * Author: Mei Yifan
+ * Date: 14/6/2025
+ * Description: Updates and displays the player's current score using TextMeshPro UI text.
+ */
+
 using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// Updates and displays the player's current score on the UI.
+/// Displays the player's current score on the UI by fetching the score from PlayerBehaviour.
 /// </summary>
 public class Score : MonoBehaviour
 {
     /// <summary>
-    /// Reference to the TextMeshPro UI component to display the score.
+    /// Reference to the TextMeshPro UI text component that shows the score.
     /// </summary>
     public TMP_Text scoreText;
 
     /// <summary>
-    /// Reference to the PlayerBehaviour script to get the current score.
+    /// Reference to the PlayerBehaviour script to retrieve the current score.
     /// </summary>
     private PlayerBehaviour player;
 
     /// <summary>
-    /// Called before the first frame update.
-    /// Finds the PlayerBehaviour instance in the scene.
+    /// Finds the PlayerBehaviour component in the scene on start.
     /// </summary>
     void Start()
     {
@@ -26,8 +31,7 @@ public class Score : MonoBehaviour
     }
 
     /// <summary>
-    /// Called once per frame.
-    /// Updates the score UI text with the player's current score.
+    /// Updates the score text UI every frame to reflect the player's current score.
     /// </summary>
     void Update()
     {

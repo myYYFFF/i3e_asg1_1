@@ -71,6 +71,10 @@ Menu buttons: https://www.youtube.com/watch?v=DX7HyN7oJjE&t=112s
 Health bar UI and feature: https://www.youtube.com/watch?v=_lREXfAMUcE&t=267s
                         https://www.youtube.com/watch?v=BLfNP4Sc_iA&t=262s
 
+Audio:
+hurt: https://pixabay.com/sound-effects/search/hurt/
+gun: https://pixabay.com/sound-effects/search/gun/
+BGM: https://pixabay.com/sound-effects/search/bgm/
 
 Additional Notes:
 N/A

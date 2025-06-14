@@ -1,33 +1,37 @@
+/*
+ * Author: Mei Yifan
+ * Date: 14/6/2025
+ * Description: Tracks elapsed time and displays it as a MM:SS formatted timer using TextMeshProUGUI.
+ */
+
 using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// Shows a running timer on the UI in minutes and seconds.
+/// Displays a running timer that shows minutes and seconds since the game started.
 /// </summary>
 public class Timer : MonoBehaviour
 {
     /// <summary>
-    /// Text component to display the timer.
+    /// Reference to the TextMeshProUGUI component used to display the timer text.
     /// </summary>
-    [SerializeField] 
-    private TextMeshProUGUI timertext;
+    [SerializeField] private TextMeshProUGUI timertext;
 
     /// <summary>
-    /// Time passed since the timer started.
+    /// Accumulated elapsed time in seconds.
     /// </summary>
     private float elapsedTime;
 
     /// <summary>
-    /// Called every frame to update the timer.
+    /// Updates the timer each frame and displays the formatted time.
     /// </summary>
     void Update()
     {
         elapsedTime += Time.deltaTime;
-
-        int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        //takes the resulting floating-point number of minutes and rounds it down to the nearest whole integer
-        int seconds = Mathf.FloorToInt(elapsedTime % 60);
-
-        timertext.text = string.Format("{0:00}:{1:00}", minutes, seconds);//min:sec
+        int minutes = Mathf.FloorToInt(elapsedTime / 60);// Round down to get whole minutes
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);// Round down to get whole seconds
+        
+         // Format as two digits (e.g. 01:07) with leading zeros if needed
+        timertext.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

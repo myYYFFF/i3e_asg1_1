@@ -1,26 +1,29 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: Controls the mob health bar UI to face the camera and update health values.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Controls the mob's health bar UI to face the camera and update health values.
+*/
 
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the health bar slider for mobs, keeping it facing the camera and updating its value.
+/// </summary>
 public class MobHealthBar : MonoBehaviour
 {
     /// <summary>
-    /// The UI slider showing the health bar.
+    /// Reference to the UI slider showing health.
     /// </summary>
     public Slider slider;
 
     /// <summary>
-    /// The main camera in the scene.
+    /// Reference to the main camera to face the health bar toward.
     /// </summary>
     public Camera mainCamera;
 
     /// <summary>
-    /// Set the main camera if not assigned.
+    /// Initialize the main camera reference if not assigned.
     /// </summary>
     void Start()
     {
@@ -29,7 +32,7 @@ public class MobHealthBar : MonoBehaviour
     }
 
     /// <summary>
-    /// Rotate the health bar to always face the camera.
+    /// Make the health bar always face the camera.
     /// </summary>
     void Update()
     {
@@ -38,7 +41,7 @@ public class MobHealthBar : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the max value of the health bar and initialize its value.
+    /// Set the slider's maximum health value and current value.
     /// </summary>
     /// <param name="health">Maximum health value.</param>
     public void SetMaxHealth(int health)
@@ -48,7 +51,7 @@ public class MobHealthBar : MonoBehaviour
     }
 
     /// <summary>
-    /// Update the health bar to show current health.
+    /// Update the slider's current health value.
     /// </summary>
     /// <param name="health">Current health value.</param>
     public void SetHealth(int health)

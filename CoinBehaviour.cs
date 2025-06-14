@@ -1,68 +1,77 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: This script controls how the coin behaves when collected and when it gets highlighted.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Handles coin behavior, including highlighting and player collection.
+*/
 
 using UnityEngine;
 
 /// <summary>
-/// Handles coin behavior like being collected and highlighted.
+/// Controls coin interaction, including highlight and score collection.
 /// </summary>
 public class CoinBehaviour : MonoBehaviour
 {
     /// <summary>
-    /// The renderer of the coin.
+    /// The coin's MeshRenderer for changing materials.
     /// </summary>
     MeshRenderer MyMeshRenderer;
 
     /// <summary>
     /// Material used when the coin is highlighted.
     /// </summary>
-    [SerializeField] Material hightlightMat;
+    [SerializeField]
+    Material hightlightMat;
 
     /// <summary>
-    /// The original material before highlight.
+    /// Stores the original material of the coin.
     /// </summary>
     Material originalMat;
 
     /// <summary>
-    /// How much the coin is worth in score.
+    /// Value the coin adds to the player's score.
     /// </summary>
     int value = 10;
 
     /// <summary>
-    /// Gives the score to the player and removes the coin.
+    /// Called when player collects the coin.
     /// </summary>
-    /// <param name="player">The player who collects the coin.</param>
+    /// <param name="player">The player collecting the coin.</param>
     public void Collect(PlayerBehaviour player)
     {
+        // Add coin value to player score
         player.ModifyScore(value);
-        Destroy(gameObject); // destroy when collected
+        
+        // Remove coin from the scene
+        Destroy(gameObject);
     }
 
     /// <summary>
-    /// Called when the coin appears. Sets up the material.
+    /// Initializes material references on start.
     /// </summary>
     void Start() 
     {
-        MyMeshRenderer = GetComponent<MeshRenderer>(); // get renderer
-        originalMat = MyMeshRenderer.material; // store original material
+        // Get the MeshRenderer component
+        MyMeshRenderer = GetComponent<MeshRenderer>(); 
+
+        // Store the original material
+        originalMat = MyMeshRenderer.material;
     }
 
     /// <summary>
-    /// Makes the coin look highlighted.
+    /// Changes material to highlight material.
     /// </summary>
-    public void Highlight()
+    public void Highlight() 
     {
+        // Apply highlight material
         MyMeshRenderer.material = hightlightMat; 
     }
 
     /// <summary>
-    /// Returns the coin to its original look.
+    /// Reverts material to original.
     /// </summary>
-    public void UnHighlight()
+    public void UnHighlight() 
     {
+        // Restore original material
         MyMeshRenderer.material = originalMat; 
     }
 }

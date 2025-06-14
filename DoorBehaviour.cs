@@ -1,35 +1,36 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: This script controls a door that opens and closes when interacted with.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Controls door interaction—opens and closes the door when triggered.
+*/
 
 using UnityEngine;
 
 /// <summary>
-/// Makes the door open and close when the player interacts with it.
+/// Handles door opening and closing when interacted with.
 /// </summary>
 public class DoorBehaviour : MonoBehaviour
 {
     /// <summary>
-    /// Whether the door is currently open or not.
+    /// Tracks if the door is currently open.
     /// </summary>
     private bool isOpen = false;
 
     /// <summary>
-    /// Called when the player interacts with the door.
-    /// It opens the door if it's closed, and closes it if it's open.
+    /// Toggles the door between open and closed states.
     /// </summary>
     public void Interact()
     {
         if (!isOpen)
         {
-            transform.rotation = Quaternion.Euler(0, 90, 0); // open door
+            // Open the door by rotating it
+            transform.rotation = Quaternion.Euler(0, 90, 0);
             isOpen = true;
         }
         else
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0); // close door
+            // Close the door by resetting rotation
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             isOpen = false;
         }
     }

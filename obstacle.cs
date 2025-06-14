@@ -1,15 +1,18 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: Controls destructible objects that can take damage, show hit highlights, and get destroyed.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Manages destructible object health, visual hit feedback, and destruction on zero health.
+*/
 
 using UnityEngine;
 
+/// <summary>
+/// Represents an object that can take damage and be destroyed, with hit highlight effect.
+/// </summary>
 public class DestructibleObject : MonoBehaviour
 {
     /// <summary>
-    /// Maximum health of the object.
+    /// Maximum health of the destructible object.
     /// </summary>
     public int maxHealth = 100;
 
@@ -19,27 +22,27 @@ public class DestructibleObject : MonoBehaviour
     private int currentHealth;
 
     /// <summary>
-    /// Default material of the object.
+    /// Default material applied when not hit.
     /// </summary>
     public Material defaultMaterial;
 
     /// <summary>
-    /// Material shown briefly when object is hit.
+    /// Material applied briefly when the object is hit.
     /// </summary>
     public Material highlightMaterial;
 
     /// <summary>
-    /// Duration to keep the highlight material.
+    /// Duration in seconds for which the highlight material stays.
     /// </summary>
     public float highlightDuration = 0.2f;
 
     /// <summary>
-    /// Renderer component used to change materials.
+    /// Renderer component for material changes.
     /// </summary>
     private Renderer objectRenderer;
 
     /// <summary>
-    /// Initialize health and set the default material.
+    /// Initializes health and sets default material.
     /// </summary>
     void Start()
     {
@@ -53,9 +56,9 @@ public class DestructibleObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Apply damage to the object, destroy it if health drops to zero or below.
+    /// Applies damage to the object, triggers highlight, and destroys if health reaches zero.
     /// </summary>
-    /// <param name="amount">Damage amount to apply.</param>
+    /// <param name="amount">Amount of damage to apply.</param>
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
@@ -72,7 +75,7 @@ public class DestructibleObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Temporarily switch to highlight material to show damage effect.
+    /// Temporarily switches material to highlight on damage.
     /// </summary>
     void HighlightOnHit()
     {
@@ -85,7 +88,7 @@ public class DestructibleObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Reset material back to default after highlight duration.
+    /// Resets the material back to default after highlight duration.
     /// </summary>
     void ResetMaterial()
     {

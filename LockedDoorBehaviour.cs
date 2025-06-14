@@ -1,43 +1,44 @@
 /*
- * Author: Mei Yifan
- * Date: 13/6/2025
- * Description: This script allows a door to open only if the player has enough score.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Door that only opens if player score is at least 70.
+*/
 
 using UnityEngine;
 
 /// <summary>
-/// A door that can only be opened if the player has enough score.
+/// Controls a locked door that requires a minimum score to open.
 /// </summary>
 public class LockedDoorBehaviour : MonoBehaviour
 {
     /// <summary>
-    /// Tracks if the door is open.
+    /// Tracks if the door is currently open.
     /// </summary>
     private bool isOpen = false;
 
     /// <summary>
-    /// Called when the player tries to open the door.
+    /// Toggles door state if player meets score requirement.
     /// </summary>
-    /// <param name="player">The player trying to open it.</param>
+    /// <param name="player">Player interacting with the door.</param>
     public void Interact(PlayerBehaviour player)
     {
-        // Check if player has enough score
+        // Check if player has enough score to open door
         if (player.GetScore() < 70)
         {
             Debug.Log("The door is locked. You need at least 70 score.");
             return;
         }
 
-        // Toggle door open/close
         if (!isOpen)
         {
-            transform.rotation = Quaternion.Euler(0, 90, 0); // Open
+            // Open door by rotating it
+            transform.rotation = Quaternion.Euler(0, 90, 0);
             isOpen = true;
         }
         else
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0); // Close
+            // Close door by resetting rotation
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             isOpen = false;
         }
 

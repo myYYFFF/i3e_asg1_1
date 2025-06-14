@@ -1,45 +1,55 @@
 /*
- * Author: [Mei Yifan]
- * Date: [13/6/2025]
- * Description: This script lets the projectile hurt enemies when it hits them.
- */
+* Author: Mei Yifan
+* Date: 13/6/2025
+* Description: Handles projectile collision and damage.
+*/
 
 using UnityEngine;
 
 /// <summary>
-/// Makes the projectile do damage when it hits something.
+/// Deals damage to enemies or objects on collision.
 /// </summary>
 public class Projectile : MonoBehaviour
 {
     /// <summary>
-    /// How much damage this projectile does.
+    /// Damage dealt on hit.
     /// </summary>
     public int damage = 1;
 
     /// <summary>
-    /// Change the damage this projectile can do.
+    /// Sets the projectile's damage.
     /// </summary>
-    /// <param name="dmg">The new damage amount.</param>
+    /// <param name="dmg">New damage value.</param>
     public void SetDamage(int dmg)
     {
         damage = dmg;
     }
 
     /// <summary>
-    /// Happens when the projectile hits something.
+    /// Applies damage on collision and destroys projectile.
     /// </summary>
-    /// <param name="collision">Info about what was hit.</param>
+    /// <param name="collision">Object the projectile hits.</param>
     private void OnCollisionEnter(Collision collision)
     {
-        // Try to get the MobHealth from what we hit
+        // Try to get MobHealth component from collided object
         MobHealth mob = collision.collider.GetComponent<MobHealth>();
         if (mob != null)
         {
-            // Deal damage to it
+            // Deal damage to mob
             mob.TakeDamage(damage);
         }
+        else
+        {
+            // Try to get DestructibleObject component
+            DestructibleObject destructible = collision.collider.GetComponent<DestructibleObject>();
+            if (destructible != null)
+            {
+                // Deal damage to destructible object
+                destructible.TakeDamage(damage);
+            }
+        }
 
-        // Destroy the projectile after it hits
+        // Destroy the projectile after impact
         Destroy(gameObject);
     }
 }
